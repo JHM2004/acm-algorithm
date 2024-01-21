@@ -1,0 +1,64 @@
+描述
+
+A supermarket has a set Prod of products on sale. It earns a profit px for each product x∈Prod sold by a deadline dx that is measured as an integral number of time units starting from the moment the sale begins. Each product takes precisely one unit of time for being sold. A selling schedule is an ordered subset of products Sell ≤ Prod such that the selling of each product x∈Sell, according to the ordering of Sell, completes before the deadline dx or just when dx expires. The profit of the selling schedule is Profit(Sell)=Σx∈Sellpx. An optimal selling schedule is a schedule with a maximum profit.
+For example, consider the products Prod={a,b,c,d} with (pa,da)=(50,2), (pb,db)=(10,1), (pc,dc)=(20,2), and (pd,dd)=(30,1). The possible selling schedules are listed in table 1. For instance, the schedule Sell={d,a} shows that the selling of product d starts at time 0 and ends at time 1, while the selling of product a starts at time 1 and ends at time 2. Each of these products is sold by its deadline. Sell is the optimal schedule and its profit is 80.
+
+
+Write a program that reads sets of products from an input text file and computes the profit of an optimal selling schedule for each set of products.
+输入描述
+
+A set of products starts with an integer 0 <= n <= 10000, which is the number of products in the set, and continues with n pairs pi di of integers, 1 <= pi <= 10000 and 1 <= di <= 10000, that designate the profit and the selling deadline of the i-th product. White spaces can occur freely in input. Input data terminate with an end of file and are guaranteed correct.
+
+输出描述
+
+For each set of products, the program prints on the standard output the profit of an optimal selling schedule for the set. Each result is printed from the beginning of a separate line.
+
+用例输入 1 
+
+4  50 2  10 1   20 2   30 1
+
+7  20 1   2 1   10 3  100 2   8 2
+   5 20  50 10
+用例输出 1 
+
+80
+185
+提示
+
+The sample input contains two product sets. The first set encodes the products from table 1. The second set is for 7 products. The profit of an optimal schedule for these products is 185.
+
+来源
+POJ 1456
+
+
+#include<iostream>
+#include<string.h>
+#include<algorithm>
+#define maxn 10005
+using namespace std;
+int f[maxn],n,Ans;
+//此题可以用动态规划的解法
+//结构体+自定义排序
+struct lc{
+    int v,c;
+    bool operator <(const lc b)const{return v<b.v||v==b.v&&c<b.c;}
+}a[maxn];
+//快读
+inline int read(){
+    int ret=0;char ch=getchar();
+    while (ch<'0'||ch>'9') ch=getchar();
+    while (ch<='9'&&ch>='0') ret=ret*10+ch-'0',ch=getchar();
+    return ret;
+}
+int main(){
+	while (cin>>n){
+	memset(f,0,sizeof f);
+    for (int i=1;i<=n;i++) a[i].c=read(),a[i].v=read();
+    sort(a+1,a+n+1);Ans=0;
+    //滚动数组对空间进行优化
+    for (int i=1;i<=n;i++)
+    for (int j=a[i].v;j;j--) f[j]=max(f[j],f[j-1]+a[i].c),Ans=max(Ans,f[j]);
+    printf("%d\n",Ans);
+}
+    return 0;
+}
