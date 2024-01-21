@@ -1,0 +1,68 @@
+出题人：
+
+描述
+
+N (1 ≤ N ≤ 100) cows, conveniently numbered 1..N, are participating in a programming contest. As we all know, some cows code better than others. Each cow has a certain constant skill rating that is unique among the competitors.
+
+The contest is conducted in several head-to-head rounds, each between two cows. If cow A has a greater skill level than cow B (1 ≤ A ≤ N; 1 ≤ B ≤ N; A ≠ B), then cow A will always beat cow B.
+
+Farmer John is trying to rank the cows by skill level. Given a list the results of M (1 ≤ M ≤ 4,500) two-cow rounds, determine the number of cows whose ranks can be precisely determined from the results. It is guaranteed that the results of the rounds will not be contradictory.
+
+输入描述
+
+* Line 1: Two space-separated integers: N and M * Lines 2..M+1: Each line contains two space-separated integers that describe the competitors and results (the first integer, A, is the winner) of a single round of competition: A and B
+
+输出描述
+
+* Line 1: A single integer representing the number of cows whose ranks can be determined 　
+
+用例输入 1 
+
+5 5
+4 3
+4 2
+3 2
+1 2
+2 5
+用例输出 1 
+
+2
+来源
+
+POJ 3660
+
+
+#include<iostream>
+using namespace std;
+//本题使用floyd算法,主要利用了战胜关系的传递性,注意是有向图
+const int N=101;
+bool vis[N][N];//注意关系是单向的
+//vis[i][j]表示i与j决斗，i是胜者 
+int n,m;
+int main()
+{
+	cin>>n>>m;
+	int a,b;
+	for(int i=1;i<=m;i++)
+	{
+		scanf("%d%d",&a,&b);
+		vis[a][b]=true;//关系是单向的 
+	}
+	for(int k=1;k<=n;k++)
+	for(int i=1;i<=n;i++)
+	for(int j=1;j<=n;j++)
+		if(vis[i][k]&&vis[k][j])//战胜关系具有传递性，i能战胜k，k能战胜j，则i能战胜j 
+			vis[i][j]=true;
+	int cnt,ans=0;
+	for(int i=1;i<=n;i++)
+	{
+		cnt=0;
+		for(int j=1;j<=n;j++)
+			if(vis[i][j]||vis[j][i])//只要i和j有关系即可确定一个i的排名因子
+				cnt++;
+		if(cnt==n-1)//只要确定了n组关于i的信息，i的排名则已经确定
+			ans++; 
+	}
+	printf("%d\n",ans);
+	return 0; 
+}
