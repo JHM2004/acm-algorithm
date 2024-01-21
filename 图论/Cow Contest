@@ -9,7 +9,7 @@ The contest is conducted in several head-to-head rounds, each between two cows. 
 Farmer John is trying to rank the cows by skill level. Given a list the results of M (1 ≤ M ≤ 4,500) two-cow rounds, determine the number of cows whose ranks can be precisely determined from the results. It is guaranteed that the results of the rounds will not be contradictory.
 
 输入描述
-
+ 
 * Line 1: Two space-separated integers: N and M * Lines 2..M+1: Each line contains two space-separated integers that describe the competitors and results (the first integer, A, is the winner) of a single round of competition: A and B
 
 输出描述
