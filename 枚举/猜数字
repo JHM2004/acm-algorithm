@@ -1,0 +1,112 @@
+出题人：
+
+描述
+
+猜数字游戏是gameboy最喜欢的游戏之一。游戏的规则是这样的：计算机随机产生一个四位数，然后玩家猜这个四位数是什么。每猜一个数，计算机都会告诉玩家猜对几个数字，其中有几个数字在正确的位置上。
+比如计算机随机产生的数字为1122。如果玩家猜1234,因为1,2这两个数字同时存在于这两个数中，而且1在这两个数中的位置是相同的，所以计算机会告诉玩家猜对了2个数字，其中一个在正确的位置。如果玩家猜1111,那么计算机会告诉他猜对2个数字，有2个在正确的位置。
+现在给你一段gameboy与计算机的对话过程，你的任务是根据这段对话确定这个四位数是什么。
+
+输入描述
+
+输入数据有多组。每组的第一行为一个正整数N(1<=N<=100)，表示在这段对话中共有N次问答。在接下来的N行中，每行三个整数A,B,C。gameboy猜这个四位数为A，然后计算机回答猜对了B个数字，其中C个在正确的位置上。当N=0时，输入数据结束。
+
+输出描述
+
+每组输入数据对应一行输出。如果根据这段对话能确定这个四位数，则输出这个四位数，若不能，则输出"Not sure"。
+
+用例输入 1 
+
+6
+4815 2 1
+5716 1 0
+7842 1 0
+4901 0 0
+8585 3 3
+8555 3 2
+2
+4815 0 0
+2999 3 3
+0
+用例输出 1 
+
+3585
+Not sure
+
+
+
+#include<iostream>
+#include<vector>
+#include<unordered_map>
+using namespace std;
+int main()
+{while(1){
+    int n;cin>>n;
+    if(n==0)break;
+        vector<vector<int>>arr(n,vector<int>(3));
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<3;j++)
+            {
+                cin>>arr[i][j];
+            }
+        }
+        //枚举答案
+        int count=0;//满足条件的个数
+        int ans=0;
+        for(int i=1000;i<=9999;i++)
+        {
+            int j=0;
+            for(;j<arr.size();j++)
+            {
+                unordered_map<int,int>index;
+                int a1=i%10;int b1=(i/10)%10;int c1=(i/100)%10;int d1=i/1000;
+            	index[i%10]++;index[(i/10)%10]++;index[(i/100)%10]++;index[i/1000]++;
+            	int x=0;int y=0;int a=0;int b=0;int c=0;int d=0;
+                a=arr[j][0]%10;b=(arr[j][0]/10)%10;c=(arr[j][0]/100)%10;d=arr[j][0]/1000;
+                if(a==a1)y++;if(b==b1)y++;if(c==c1)y++;if(d==d1)y++;
+                if(y!=arr[j][2])break;
+                if(index.count(a))
+                {
+                    if(index[a]>0)
+                    {
+                        index[a]--;
+                        x++;
+                    }
+                    
+                }
+                if(index.count(b))
+                {
+                    if(index[b]>0)
+                    {
+                        index[b]--;
+                        x++;
+                    }
+                    
+                }
+                if(index.count(c))
+                {
+                    if(index[c]>0)
+                    {
+                        index[c]--;
+                        x++;
+                    }
+                    
+                }
+                if(index.count(d))
+                {
+                    if(index[d]>0)
+                    {
+                        index[d]--;
+                        x++;
+                    }
+                    
+                }
+                if(x!=arr[j][1])break;
+            }
+            if(j==arr.size()){count++;ans=i;}
+        }
+        if(count==1)cout<<ans<<endl;
+        else cout<<"Not sure"<<endl;
+    }
+    return 0;
+}
