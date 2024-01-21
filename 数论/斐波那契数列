@@ -1,0 +1,97 @@
+描述
+
+大家都知道，斐波那契数列是满足如下性质的一个数列：
+
+F 
+n
+​
+ ={ 
+1 (n≤2)
+F 
+n−1
+​
+ +F 
+n−2
+​
+  (n≥3)
+​
+ 
+
+请你求出 F 
+n
+​
+ mod10 
+9
+ +7 的值。
+
+输入描述
+
+一行一个正整数 n。
+
+输出描述
+
+输出一行一个整数表示答案。
+
+用例输入 1 
+
+5
+用例输出 1 
+
+5
+用例输入 2 
+
+10
+用例输出 2 
+
+55
+提示
+
+对于 60% 的数据，1≤n≤92；
+对于 100% 的数据，1≤n<2 
+63
+ 。
+
+
+
+ ac代码
+
+
+ #include<bits/stdc++.h>
+#define int long long
+using namespace std;
+
+const int mod=1e9+7;
+
+vector<vector<int>>mul(vector<vector<int>>&a,vector<vector<int>>&b)
+{
+    int len1=a.size();int len2=a[0].size();int len3=b[0].size();
+    vector<vector<int>>ans(len1,vector<int>(len3,0));
+    for(int i=0;i<len1;i++)
+    {
+        for(int j=0;j<len3;j++)
+        {
+            for(int k=0;k<len2;k++)
+            {
+                ans[i][j]=(ans[i][j]+(long long)a[i][k]*b[k][j]%mod)%mod;
+            }
+        }
+    }
+    return ans;
+}
+
+signed main()
+{
+    int n;cin>>n;
+    vector<vector<int>>a(2,vector<int>(2,0));
+    a[1][1]=a[0][1]=a[1][0]=1;
+    vector<vector<int>>b(2,vector<int>(1,0));
+    b[1][0]=1;
+    while(n)
+    {
+        if(n&1)b=mul(a,b);
+        a=mul(a,a);
+        n>>=1;
+    }
+    cout<<b[0][0];
+    return 0;
+}
