@@ -1,0 +1,95 @@
+描述
+
+Freddy Frog is sitting on a stone in the middle of a lake. Suddenly he notices Fiona Frog who is sitting on another stone. He plans to visit her, but since the water is dirty and full of tourists’ sunscreen, he wants to avoid swimming and instead reach her by jumping.
+Unfortunately Fiona’s stone is out of his jump range. Therefore Freddy considers to use other stones as intermediate stops and reach her by a sequence of several small jumps.
+To execute a given sequence of jumps, a frog’s jump range obviously must be at least as long as the longest jump occuring in the sequence.
+The frog distance (humans also call it minimax distance) between two stones therefore is defined as the minimum necessary jump range over all possible paths between the two stones.
+
+You are given the coordinates of Freddy’s stone, Fiona’s stone and all other stones in the lake. Your job is to compute the frog distance between Freddy’s and Fiona’s stone.
+
+输入描述
+
+The input will contain one or more test cases. The first line of each test case will contain the number of stones n (2<=n<=200). The next n lines each contain two integers xi,yi (0 <= xi,yi <= 1000) representing the coordinates of stone #i. Stone #1 is Freddy’s stone, stone #2 is Fiona’s stone, the other n-2 stones are unoccupied. There’s a blank line following each test case. Input is terminated by a value of zero (0) for n.
+
+输出描述
+
+For each test case, print a line saying “Scenario #x” and a line saying “Frog Distance = y” where x is replaced by the test case number (they are numbered from 1) and y is replaced by the appropriate real number, printed to three decimals. Put a blank line after each test case, even after the last one.
+
+用例输入 1 
+
+2
+0 0
+3 4
+
+3
+17 4
+19 4
+18 5
+
+0
+用例输出 1 
+
+Scenario #1
+Frog Distance = 5.000
+
+Scenario #2
+Frog Distance = 1.414
+来源POJ 2253
+
+
+
+//选择的路线上可以跳的最大距离，小于其它任何路线上可以跳的最大距离。
+//输出两者间所有路径的最大值的最小值 
+#include<cstdio>
+#include<iostream>
+#include<cmath> 
+#include<cstring>
+using namespace std;
+int i,j,k,s=0,n,m,temp,a=1;
+int book[1111],e[1111][2];   //book  用来储存是否经过     e用来储存  石头的坐标 
+double dis[1111];            //储存距离 
+const int inf=99999999;
+double space(int a,int b)       //计算两点间的距离 
+{
+	double x=(e[a][0]-e[b][0])*1.0;
+	double y=(e[a][1]-e[b][1])*1.0;
+	return  sqrt(x*x+y*y);
+} 
+//dijkstra的思想，有所转换（求各路径中单条路径最大值的最小值）
+void dijk(int n)
+{
+	memset(book,0,sizeof(book));    //初始化 
+	for(i=0;i<=n;i++)    //初始化 
+	    dis[i]=inf; 
+	dis[1]=0;      //最开始青蛙a在的那块石头跳的距离为0 
+	for(j=1;j<=n;j++)
+	{
+		m=0;
+		temp=inf;
+		for(k=1;k<=n;k++)          //距离青蛙a在的石头最近的那块石头 
+		   if(!book[k]&&dis[k]<temp)
+		   {
+		   	m=k;
+		   	temp=dis[k];
+		   }   
+		book[m]=1;      //青蛙a跳过去并标记这块距离最近的石头  
+		for(k=1;k<=n;k++)          //优化其他石头到青蛙a一开始在的石头的距离 
+		   if(!book[k]&&dis[k]>max(dis[m],space(m,k)))
+		        dis[k]=max(dis[m],space(m,k));
+	}
+}
+int main()
+{
+	while(~scanf("%d",&n) && n!=0)   //输入 石头的个数 
+	{
+		for(i=1;i<=n;i++)
+		{
+			scanf("%d%d",&e[i][0],&e[i][1]);    //输入石头的坐标 
+		}
+		dijk(n);          //调用 
+		s++;
+		printf("Scenario #%d\n",s);    //输出第几个案例 
+		printf("Frog Distance = %.3lf\n\n",dis[2]);    //输出案例中所有路径的最大跳跃距离中的最小值 
+	}
+	return 0;
+}
