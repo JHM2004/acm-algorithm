@@ -1,0 +1,66 @@
+出题人：
+
+描述
+
+Alice和Bob玩取石子游戏，共有三堆石子，第一堆有a块石子，第二堆有b块石子，第三堆有c块石子。
+
+规则：每人每次只能取一块石子，第一堆只能被Alice取，第二堆只能被Bob取，第三堆二人都可以取。
+
+双方轮流取石子，Alice先手，无法取石子者输，你需要判断谁会赢得这场游戏。
+
+输入描述
+
+第一行包含一个正整数T(1≤T≤10 
+4
+ )，表示有T组数据
+
+接下来T行，每行包含三个正整数a,b,c(a,b,c≤10 
+9
+ )，表示三堆石子的数量
+
+输出描述
+
+对于每组数据，如果Alice获胜则输出Alice，否则输出Bob。
+
+用例输入 1 
+
+5
+1 1 1
+9 3 3
+1 2 3
+6 6 9
+2 2 8
+用例输出 1 
+
+Alice
+Alice
+Bob
+Alice
+Bob
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int t;cin>>t;
+    while(t--)
+    {
+        int a,b,c;
+        cin>>a>>b>>c;
+        if(c&1)
+        {
+            if(b<=a)cout<<"Alice";
+            else cout<<"Bob";
+        }
+        else
+        {
+            if(a<=b)cout<<"Bob";
+            else cout<<"Alice";
+        }
+        if(t)cout<<endl;
+    }
+    return 0;
+}
