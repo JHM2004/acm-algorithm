@@ -1,0 +1,93 @@
+Farmer John and Betsy are playing a game with N (1 <= N <= 30,000)identical cubes labeled 1 through N. They start with N stacks, each containing a single cube. Farmer John asks Betsy to perform P (1<= P <= 100,000) operation. There are two types of operations:
+moves and counts.
+
+In a move operation, Farmer John asks Bessie to move the stack containing cube X on top of the stack containing cube Y.
+In a count operation, Farmer John asks Bessie to count the number of cubes on the stack with cube X that are under the cube X and report that value.
+Write a program that can verify the results of the game.
+
+输入描述
+
+Line 1: A single integer, P
+
+Lines 2…P+1: Each of these lines describes a legal operation. Line 2 describes the first operation, etc. Each line begins with a ‘M’ for a move operation or a ‘C’ for a count operation. For move operations, the line also contains two integers: X and Y.For count operations, the line also contains a single integer: X.
+
+Note that the value for N does not appear in the input file. No move operation will request a move a stack onto itself.
+
+输出描述
+
+Print the output from each of the count operations in the same order as the input file.
+
+用例输入 1 
+
+6
+M 1 6
+C 1
+M 2 4
+M 2 6
+C 3
+C 4
+用例输出 1 
+
+1
+0
+2
+
+
+来源
+POJ 1988
+
+
+
+
+#include<cstdio>
+#include<iostream>
+#include<cmath> 
+#define num 30001
+using namespace std;
+int n,fa[30005],dis[30005],length[30005];
+int read()
+{
+    int x=0,f=1; char c=getchar();
+    while (c<'0' || c>'9') {if (c=='-') f=-1; c=getchar();}
+    while (c>='0'&&c<='9') {x=(x<<3)+(x<<1)+(c^48); c=getchar();}
+    return x*f;
+}
+int find(int xx)
+{
+    if (fa[xx]==xx) return xx;
+    int father=find(fa[xx]);
+    dis[xx]+=dis[fa[xx]];
+    fa[xx]=father;
+    return father;
+}
+void move(int x,int y)
+{
+    int fx=find(x);
+    int fy=find(y);
+    fa[fx]=fy;
+    dis[fx]+=length[fy];	
+    length[fy]+=length[fx];
+}
+void check(int x)
+{
+    int ffx=find(x); 
+    printf("%d\n",dis[x]);
+}
+int main()
+{
+    n=read();
+    for (int i=1;i<=num;i++) fa[i]=i;
+    for (int i=1;i<=num;i++) length[i]=1;
+    for (int w=1;w<=n;w++)
+    {
+        char c; cin>>c;
+        int x=read();
+        if (c=='M')
+        {
+            int y=read(); 
+            move(x,y);
+        }
+        if (c=='C') check(x);
+    }
+    return 0;
+}
