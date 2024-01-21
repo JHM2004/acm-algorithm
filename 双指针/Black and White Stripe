@@ -1,0 +1,103 @@
+出题人：
+
+描述
+
+You have a stripe of checkered paper of length n. Each cell is either white or black.
+
+What is the minimum number of cells that must be recolored from white to black in order to have a segment of k consecutive black cells on the stripe?
+
+If the input data is such that a segment of k consecutive black cells already exists, then print 0.
+
+输入描述
+
+The first line contains an integer t (1≤t≤10 
+4
+ ) — the number of test cases.
+
+Next, descriptions of t test cases follow.
+
+The first line of the input contains two integers n and k (1≤k≤n≤2⋅10 
+5
+ ). The second line consists of the letters 'W' (white) and 'B' (black). The line length is n.
+
+It is guaranteed that the sum of values n does not exceed 2⋅10 
+5
+ .
+
+输出描述
+
+For each of t test cases print an integer — the minimum number of cells that need to be repainted from white to black in order to have a segment of k consecutive black cells.
+
+用例输入 1 
+
+4
+5 3
+BBWBW
+5 5
+BBWBW
+5 1
+BBWBW
+1 1
+W
+用例输出 1 
+
+1
+2
+0
+1
+提示
+
+In the first test case, s="BBWBW" and k=3. It is enough to recolor s 
+3
+​
+  and get s="BBBBW". This string contains a segment of length k=3 consisting of the letters 'B'.
+
+In the second test case of the example s="BBWBW" and k=5. It is enough to recolor s 
+3
+​
+  and s 
+5
+​
+  and get s="BBBBB". This string contains a segment of length k=5 consisting of the letters 'B'.
+
+In the third test case of the example s="BBWBW" and k=1. The string s already contains a segment of length k=1 consisting of the letters 'B'.
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int n;cin>>n;
+    while(n--)
+    {
+       	int len,k;cin>>len>>k;
+        string s;cin>>s;
+        int right=0;
+        int countb=0;
+        int countw=0;
+        int left=0;
+        int min_ok=1e9;
+       	for( right=0;right<k;right++)
+        {
+            if(s[right]=='B')countb++;
+            else countw++;
+        }
+        right--;
+        min_ok=min(min_ok,countw);
+        while(1)
+        {
+			if(s[left]=='B')countb--;
+            if(s[left]=='W')countw--;
+            left++;
+            right++;
+            if(right>=len)break;
+            if(s[right]=='B')countb++;
+            if(s[right]=='W')countw++;
+            min_ok=min(min_ok,countw);
+            
+        }
+        cout<<min_ok<<endl;
+    }
+    return 0;
+}
