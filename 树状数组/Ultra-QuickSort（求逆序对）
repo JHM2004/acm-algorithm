@@ -1,0 +1,106 @@
+描述
+
+In this problem, you have to analyze a particular sorting algorithm. The algorithm processes a sequence of n distinct integers by swapping two adjacent sequence elements until the sequence is sorted in ascending order. For the input sequence
+
+9 1 0 5 4 ,
+Ultra-QuickSort produces the output
+0 1 4 5 9 .
+Your task is to determine how many swap operations Ultra-QuickSort needs to perform in order to sort a given input sequence.
+输入描述
+
+The input contains several test cases. Every test case begins with a line that contains a single integer n < 500,000 – the length of the input sequence. Each of the the following n lines contains a single integer 0 ≤ a[i] ≤ 999,999,999, the i-th input sequence element. Input is terminated by a sequence of length n = 0. This sequence must not be processed.
+
+输出描述
+
+For every input sequence, your program prints a single line containing an integer number op, the minimum number of swap operations necessary to sort the given input sequence.
+
+用例输入 1 
+
+5
+9
+1
+0
+5
+4
+3
+1
+2
+3
+0
+用例输出 1 
+
+6
+0
+
+
+来源
+POJ 2299
+
+//板子题，用树状数组求逆序对的对数
+
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#define lson l,m,rt<<1
+#define rson m+1,r,rt<<1|1
+#define MAX 500020
+using namespace std;
+int data[MAX],t[MAX],sum[MAX<<2];
+
+void PushUP(int rt){
+	sum[rt]=sum[rt<<1]+sum[rt<<1|1];
+}
+
+int Find(int s,int e,int aim){
+	while(s<=e){
+		int mid=(s+e)>>1;
+		if(t[mid]==aim){
+			while(t[mid-1]==t[mid]) mid--;
+			return mid;
+		}
+		else if(t[mid]>aim) e=mid-1;
+		else s=mid+1;
+	}
+}
+
+void Revise(int p,int l,int r,int rt){
+	if(l==r){
+		sum[rt]+=1;
+		return;
+	}
+	int m=(l+r)>>1;
+	if(p<=m) Revise(p,lson);
+	else Revise(p,rson);
+	PushUP(rt);
+}
+
+long long View(int L,int R,int l,int r,int rt){
+	if(L<=l&&R>=r) return sum[rt];
+	int m=(l+r)>>1;
+	long long tot=0;
+	if(L<=m) tot+=View(L,R,lson);
+	if(R>=m+1) tot+=View(L,R,rson);
+	return tot;
+}
+
+int main(){
+//	freopen("in.txt","r",stdin);
+	int n; long long ans;
+	while(scanf("%d",&n)&&n){
+		memset(sum,0,sizeof(sum));
+		ans=0;
+		for(int i=1;i<=n;i++){
+			scanf("%d",&data[i]);
+			t[i]=data[i];
+		}
+		sort(t+1,t+1+n);
+		for(int i=1;i<=n;i++){
+			int f=Find(1,n,data[i]);
+			ans+=View(f+1,n,1,n,1);
+			Revise(f,1,n,1);	
+		}
+		printf("%lld\n",ans);
+	}
+	
+	return 0;
+}
