@@ -1,0 +1,70 @@
+出题人：
+
+描述
+
+小数学家低斯大时候偶然间发现一种有趣的自然数集合Blah，对于以a为基的集合Ba定义如下：
+
+(1)a是集合Ba的基，且a是Ba的第一个元素；
+(2)如果x在集合Ba中，则2x+1和3x+1也都在集合Ba中；
+(3)没有其他元素在集合Ba中了。
+
+现在大低斯想知道如果将集合Ba中元素按照升序排列，第N个元素会是多少？
+
+输入描述
+
+一行，两个整数，分别是基a和元素需要n。
+a <= 50, b <= 1e7
+
+输出描述
+
+一行，一个整数，表示以a为基Blash数集第n个元素
+
+用例输入 1 
+
+1 100
+用例输出 1 
+
+418
+用例输入 2 
+
+28 5437
+用例输出 2 
+
+900585
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+	long long a,n;
+	ios::sync_with_stdio(false); 
+	stack<long long> s;
+	queue<long long> q1,q2;
+	cin>>a>>n;
+	s.push(a);
+	long long num = n-1;  
+	while(num--){      
+		long long top = s.top();
+		q1.push(top*2+1);
+		q2.push(top*3+1);
+		long long front1 = q1.front();
+		long long front2 = q2.front();
+		if(front1>front2){
+			s.push(front2);
+			q2.pop();
+		}	
+		else if(front1<front2){
+			s.push(front1);
+			q1.pop();
+		}
+		else{     
+			s.push(front1);
+			q1.pop();
+			q2.pop();
+		}
+	}
+	
+	cout<<s.top()<<endl;
+	return 0;
+}
