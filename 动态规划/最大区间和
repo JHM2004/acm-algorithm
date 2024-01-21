@@ -1,0 +1,61 @@
+描述
+
+给定一个长度为N的数列(a[n])，求一段连续子区间，使其区间和最大。
+
+输入描述
+
+第一行包含整数 n。
+第二行包含 n个整数，表示完整序列。
+
+−10000≤a[i]≤10000
+
+1≤n≤1000
+
+输出描述
+
+输出一个整数，表示最大区间和。
+
+用例输入 
+
+5
+1 -9 3 -2 5
+用例输出 
+
+6
+
+
+
+代码：
+
+
+
+//区间合并动态规划
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N=305;
+int a[N],s[N],dp[N][N];
+int main()
+{
+    int n;cin>>n;
+    memset(dp,0x3f3f3f3f,sizeof dp);
+    for(int i=1;i<=n;i++)
+    {
+        cin>>a[i];
+        dp[i][i]=0;//初始化
+        s[i]=s[i-1]+a[i];
+    }
+    for(int i=2;i<=n;i++)
+    {
+        for(int j=1;j+i-1<=n;j++)
+        {
+            int l=j,r=j+i-1;
+            for(int k=1;k<r;k++)
+            {
+                dp[l][r]=min(dp[l][r],dp[l][k]+dp[k+1][r]+s[r]-s[l-1]);
+            }
+        }
+    }
+    cout<<dp[1][n]<<endl;
+    return 0;
+}
