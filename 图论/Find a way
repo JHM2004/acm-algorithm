@@ -1,0 +1,147 @@
+出题人：
+
+描述
+
+Pass a year learning in Hangzhou, yifenfei arrival hometown Ningbo at finally. Leave Ningbo one year, yifenfei have many people to meet. Especially a good friend Merceki.
+Yifenfei’s home is at the countryside, but Merceki’s home is in the center of city. So yifenfei made arrangements with Merceki to meet at a KFC. There are many KFC in Ningbo, they want to choose one that let the total time to it be most smallest.
+Now give you a Ningbo map, Both yifenfei and Merceki can move up, down ,left, right to the adjacent road by cost 11 minutes.
+
+输入描述
+
+The input contains multiple test cases.
+Each test case include, first two integers n, m. (2<=n,m<=200).
+Next n lines, each line included m character.
+‘Y’ express yifenfei initial position.
+‘M’    express Merceki initial position.
+‘#’ forbid road;
+‘.’ Road.
+‘@’ KCF
+
+输出描述
+
+For each test case output the minimum total time that both yifenfei and Merceki to arrival one of KFC.You may sure there is always have a KFC that can let them meet.
+
+用例输入 1 
+
+4 4
+Y.#@
+....
+.#..
+@..M
+4 4
+Y.#@
+....
+.#..
+@#.M
+5 5
+Y..@.
+.#...
+.#...
+@..M.
+#...#
+用例输出 1 
+
+66
+88
+66
+
+
+来源HDU 2612
+
+
+
+#include <iostream>
+#include <queue>
+#include <string.h>
+using namespace std;
+char a[201][201];
+int step[201][201];
+int m1[201][201];
+int m2[201][201];
+bool isw[201][201];
+int dx[4] = {0,1,0,-1};
+int dy[4] = {1,0,-1,0};
+int n,m;
+int ycurx,ycury;
+int mcurx,mcury;
+struct NODE{
+    int x;
+    int y;
+};
+int Min(int a,int b)
+{
+    return a<b?a:b;
+}
+bool judge(int x,int y)
+{
+    if( x<1 || y<1 || x>n || y>m )    //越界 
+        return 1;
+    if( isw[x][y] )    //走过了 
+        return 1;
+    if( a[x][y]=='#' )    //碰到墙 
+        return 1;
+    return 0;
+}
+void bfs(int curx,int cury)
+{
+    queue <NODE> q;    //创建队列 
+    NODE cur,next;
+    cur.x = curx;
+    cur.y = cury;
+    q.push(cur);    //入队 
+    memset(isw,0,sizeof(isw));
+    isw[curx][cury] = true;
+    step[curx][cury] = 0;
+    while(!q.empty()){
+        cur = q.front();
+        q.pop();
+        for(int i=0;i<4;i++){
+            int nx = cur.x + dx[i];
+            int ny = cur.y + dy[i];
+            if( judge(nx,ny) )     
+                continue;
+            step[nx][ny] = step[cur.x][cur.y] + 1;    //记录走到下一步的步数 
+            isw[nx][ny] = true;
+            next.x = nx;
+            next.y = ny;
+            q.push(next);
+        }
+    }
+}
+int main()
+{
+    while(cin>>n>>m){
+        for(int i=1;i<=n;i++)
+            for(int j=1;j<=m;j++){
+                cin>>a[i][j];
+                if(a[i][j]=='Y'){    //记录Y的位置 
+                    ycurx=i;
+                    ycury=j;
+                }
+                else if(a[i][j]=='M'){    //记录M的位置 
+                    mcurx=i;
+                    mcury=j;
+                }
+            }
+        int tmin = 999999999;
+        bfs(ycurx,ycury);    //以（ycurx，ycury）为起点开始广度优先搜索 
+        for(int i=1;i<=n;i++)
+            for(int j=1;j<=m;j++){
+                m1[i][j]=step[i][j];
+            }
+        bfs(mcurx,mcury);    //以（mcurx，mcury）为起点开始广搜优先搜索 
+        for(int i=1;i<=n;i++)
+            for(int j=1;j<=m;j++){
+                m2[i][j]=step[i][j];
+            }
+        for(int i=1;i<=n;i++)    //遍历出最短的总步数 
+            for(int j=1;j<=m;j++){
+                step[i][j]=m1[i][j] + m2[i][j];
+                if(a[i][j]=='@'){
+                    tmin = Min(tmin,step[i][j]);
+                }
+            }
+        cout<<tmin*11<<endl;    //输出最短总时间 
+    }
+    return 0;
+}
