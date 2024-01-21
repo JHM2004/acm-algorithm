@@ -1,0 +1,82 @@
+描述
+
+给定一个范围 n，有 q 个询问，每次输出第 k 小的素数。
+
+输入描述
+
+第一行包含两个正整数 n,q，分别表示查询的范围和查询的个数。
+
+接下来 q 行每行一个正整数 k，表示查询第 k 小的素数。
+
+输出描述
+
+输出 q 行，每行一个正整数表示答案。
+
+用例输入 1 
+
+100 5
+1
+2
+3
+4
+5
+用例输出 1 
+
+2
+3
+5
+7
+11
+提示
+
+对于 100% 的数据，n=10 
+7
+ ，1≤q≤10 
+6
+ ，保证查询的素数不大于 n。
+本题可能要用到较快的读入，以下是利用getchar函数加速读入的函数：
+
+inline void read(int &x){
+    int s=0,w=1;char ch=getchar();
+    while(ch<'0'||ch>'9'){if(ch=='-')w=-1;ch=getchar();}
+    while(ch>='0'&&ch<='9'){s=(s*10)+ch-'0';ch=getchar();}
+    x=s*w;
+}
+来源
+
+2024TJUACM寒假集训-基础数论
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+inline void read(int &x){
+    int s=0,w=1;char ch=getchar();
+    while(ch<'0'||ch>'9'){if(ch=='-')w=-1;ch=getchar();}
+    while(ch>='0'&&ch<='9'){s=(s*10)+ch-'0';ch=getchar();}
+    x=s*w;
+}
+const int N=10000010;
+int main()
+{
+    bool vis[N];
+    int prime[N],cnt=0;
+    int n,k;
+    read(n);read(k);
+    for(int i=2;i<=n;i++)
+    {
+        if(!vis[i])prime[++cnt]=i;
+        for(int j=1;j<=cnt&&i*prime[j]<=n;j++)
+        {
+            vis[i*prime[j]]=true;
+            if(i%prime[j]==0)break;
+        }
+    }
+    while(k--)
+    {
+        int ret;read(ret);
+        cout<<prime[ret]<<endl;
+    }
+    return 0;
+}
