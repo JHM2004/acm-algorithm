@@ -1,0 +1,63 @@
+描述
+
+Let's consider a table consisting of n rows and n columns. The cell located at the intersection of i-th row and j-th column contains number i × j. The rows and columns are numbered starting from 1.
+
+You are given a positive integer x. Your task is to count the number of cells in a table that contain number x.
+
+输入描述
+
+The single line contains numbers n and x (1 ≤ n ≤ 105, 1 ≤ x ≤ 109) — the size of the table and the number that we are looking for in the table.
+
+输出描述
+
+Print a single number: the number of times x occurs in the table.
+
+用例输入 1 
+
+10 5
+用例输出 1 
+
+2
+用例输入 2 
+
+6 12
+用例输出 2 
+
+4
+用例输入 3 
+
+5 13
+用例输出 3 
+
+0
+提示
+
+A table for the second sample test is given below. The occurrences of number 12 are marked bold.
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int n;
+    double x;
+    cin>>n>>x;
+    int count=0;
+    double ret=sqrt(x);
+    for(int i=1;i<=min((int)ret,n);i++)
+    {
+        if(x/i<=n&&x/i==(int)x/i&&x/i!=i)
+        {
+            count++;
+        }
+    }
+    count<<=1;
+	if(ret==(int)ret&&ret<=n)
+    {
+        count++;
+    }
+    cout<<count;
+    return 0;
+}
