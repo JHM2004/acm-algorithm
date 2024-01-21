@@ -1,0 +1,54 @@
+
+描述
+
+在一条直线上有n堆石子，每堆有一定的质量，每次可以将两堆相邻的石子合并，合并后放在两堆的中间位置，合并的费用为两堆石子的质量总和。求把所有石子合并成一堆的最小花费。例如：输入1，2，3，4，5，输出33。【3+6+9+15=33】
+
+输入描述
+
+每组输入包括两行，第一行为石子堆的个数n，第二行则为每堆石子的质量。
+1≤n≤300,1≤a[i]≤100
+
+输出描述
+
+输出最小花费。
+
+用例输入 
+
+5
+1 2 3 4 5
+用例输出 
+
+33
+
+
+
+//区间合并动态规划
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N=305;
+int a[N],s[N],dp[N][N];
+int main()
+{
+    int n;cin>>n;
+    memset(dp,0x3f3f3f3f,sizeof dp);
+    for(int i=1;i<=n;i++)
+    {
+        cin>>a[i];
+        dp[i][i]=0;//初始化
+        s[i]=s[i-1]+a[i];
+    }
+    for(int i=2;i<=n;i++)
+    {
+        for(int j=1;j+i-1<=n;j++)
+        {
+            int l=j,r=j+i-1;
+            for(int k=1;k<r;k++)
+            {
+                dp[l][r]=min(dp[l][r],dp[l][k]+dp[k+1][r]+s[r]-s[l-1]);
+            }
+        }
+    }
+    cout<<dp[1][n]<<endl;
+    return 0;
+}
