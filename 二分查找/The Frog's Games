@@ -1,0 +1,96 @@
+描述
+
+The annual Games in frogs’ kingdom started again. The most famous game is the Ironfrog Triathlon. One test in the Ironfrog Triathlon is jumping. This project requires the frog athletes to jump over the river. The width of the river is L (1<= L <= 1000000000). There are n (0<= n <= 500000) stones lined up in a straight line from one side to the other side of the river. The frogs can only jump through the river, but they can land on the stones. If they fall into the river, they
+are out. The frogs was asked to jump at most m (1<= m <= n+1) times. Now the frogs want to know if they want to jump across the river, at least what ability should they have. (That is the frog’s longest jump distance).
+
+输入描述
+
+The input contains several cases. The first line of each case contains three positive integer L, n, and m.
+Then n lines follow. Each stands for the distance from the starting banks to the nth stone, two stone appear in one place is impossible.
+
+输出描述
+
+For each case, output a integer standing for the frog’s ability at least they should have.
+
+用例输入 1 
+
+6 1 2
+2
+25 3 3
+11 
+2
+18
+用例输出 1 
+
+4
+11
+
+
+
+#include <iostream>
+#include <algorithm>
+#include <stdio.h>
+ 
+using namespace std;
+ 
+const int N = 1e5;
+int dist[N + 1];//存储石头的位置
+int l, n, m; //把题目给的变量设为全局变量，方便函数的使用 
+ 
+bool judge(int mid)//判断跳远最大距离为mid行不行
+{
+    
+ //cnt总共需要跳cnt次
+int cnt=0;int count=0;
+    //数组dist的范围是[0,n]
+	for(int i=0;i<=n;i++)
+    {
+        if(count+dist[i]<=mid)
+        {
+            count+=dist[i];
+        }
+        else 
+        {
+            if(dist[i]>mid)return false;
+            cnt++;
+            count=dist[i];
+        }
+    }
+    return ++cnt <= m;
+}
+ 
+void solve()
+{
+    //此时的left与right表示枚举跳远的最远距离
+    int left = 0, right = l, ans = l;
+ 
+    while(left < right) {
+        int mid = (left + right) / 2;
+        if(judge(mid)) {
+            ans = mid;
+ 
+            right = mid;
+        } else
+            left = mid + 1;
+    }
+ 
+    printf("%d\n", ans);
+}
+ 
+int main()
+{
+    while(~scanf("%d%d%d", &l, &n, &m)) {
+        for(int i=0; i<n; i++)
+            scanf("%d", &dist[i]);
+        dist[n] = l;//河长
+ 
+        sort(dist, dist + n + 1);
+ 		for(int i=n;i>=1;i--)
+        {
+            dist[i]-=dist[i-1];
+        }
+        solve();
+    }
+ 
+    return 0;
+}
