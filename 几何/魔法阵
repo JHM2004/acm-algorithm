@@ -1,0 +1,83 @@
+出题人：
+
+描述
+
+有一个圆形的魔法阵，圆形法阵的圆周上有N个点。当法阵圆周上的某四个不同的点恰好能组成矩形时，法阵的能产生1单位的能量。（注：若至少存在一个节点不相同，则认为两个矩形不相同，同一个点可以被统计到多个矩形中）
+现在，已知相邻两点间的弧长均为正整数，按照以某一点为起点顺序给出相邻两点间弧长，求这个法阵能产生多少单位的能量。
+
+
+输入描述
+
+第一行一个整数N
+接下来N行，每行一个整数，分别代表相邻两点间分割的圆弧长度。
+
+输出描述
+
+一个整数，代表法阵产生的能量。
+
+用例输入 1 
+
+8
+1
+2
+2
+3
+1
+1
+3
+3
+用例输出 1 
+
+3
+提示
+
+对于40%的数据，满足N<=20
+对于70%的数据，满足N<=5000
+对于100%的数据，满足N<=200000
+
+来源
+
+课程-程序设计原理
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+   	int n;cin>>n;
+    vector<int>arr1(n);
+    for(int i=0;i<n;i++)cin>>arr1[i];
+    long long sum=0L;
+    for(int i=0;i<n;i++)sum+=arr1[i];
+    sum>>=1;//半弧长  
+ int count=0;
+	int i=0;int j=1;
+    arr1.pop_back();
+    long long add=arr1[i];
+    while(j<=arr1.size())
+    {
+        if(add==sum)
+        {
+            count++;
+            add-=arr1[i];
+            i++;
+        }
+        else if(add<sum)
+                {
+            if(j==arr1.size())break;
+            
+            add+=arr1[j];
+                    j++;
+                }
+        else
+        {
+            add-=arr1[i];
+            i++;
+        }
+    }
+    cout<<(long long)count*(count-1)/2;
+    return 0;
+}
+
+
