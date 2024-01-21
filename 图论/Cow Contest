@@ -40,7 +40,7 @@ bool vis[N][N];//注意关系是单向的
 //vis[i][j]表示i与j决斗，i是胜者 
 int n,m;
 int main()
-{
+{ 
 	cin>>n>>m;
 	int a,b;
 	for(int i=1;i<=m;i++)
