@@ -1,0 +1,151 @@
+出题人：
+
+描述
+
+You are given a square grid with n rows and n columns. Each cell contains either 0 or 1.
+
+In an operation, you can select a cell of the grid and flip it (from 0→1 or 1→0). Find the minimum number of operations you need to obtain a square that remains the same when rotated 0 
+∘
+ , 90 
+∘
+ , 180 
+∘
+  and 270 
+∘
+ .
+
+The picture below shows an example of all rotations of a grid.
+
+
+输入描述
+
+The first line contains a single integer t (1≤t≤100) — the number of test cases.
+
+The first line of each test case contains a single integer n (1≤n≤100) — the size of the grid.
+
+Then n lines follow, each with n characters a 
+i,j
+​
+  (0≤a 
+i,j
+​
+ ≤1) — the number written in each cell.
+
+输出描述
+
+For each test case output a single integer  — the minimum number of operations needed to make the square look the same rotated 0 
+∘
+ , 90 
+∘
+ , 180 
+∘
+  and 270 
+∘
+ .
+
+用例输入 1 
+
+5
+3
+010
+110
+010
+1
+0
+5
+11100
+11011
+01011
+10011
+11000
+5
+01000
+10101
+01010
+00010
+01001
+5
+11001
+00000
+11111
+10110
+01111
+用例输出 1 
+
+1
+0
+9
+7
+6
+提示
+
+In the first test case, we can perform one operations to make the grid  
+0
+1
+0
+​
+  
+1
+1
+1
+​
+  
+0
+1
+0
+​
+ . Now, all rotations of the square are the same.
+
+In the second test case, all rotations of the square are already the same, so we don't need any flips.
+
+
+
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+//点转完变成的坐标
+vector<int>f(vector<int>&c,int n)//n=c.size()-1
+{
+    int a=c[0];
+    int b=c[1];
+    vector<int>ans(2);
+    ans[0]=b;
+    ans[1]=n-a;
+    return ans;
+}
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+       	int n;cin>>n;
+        vector<string>arr(n);
+        for(int i=0;i<n;i++)cin>>arr[i];
+        int ans=0;
+        for(int i=0;i<((n&1)?n/2+1:n/2);i++)
+        {
+            for(int j=0;j<n/2;j++)
+            {
+                //i,j是第一对
+                vector<int>rrr(2);rrr[0]=i;rrr[1]=j;
+               	vector<int>a=f(rrr,n-1);
+                vector<int>b=f(a,n-1);
+                vector<int>c=f(b,n-1);
+                int count0=0;int count1=0;
+                if(arr[i][j]=='0')count0++;
+                if(arr[a[0]][a[1]]=='0')count0++;
+                if(arr[b[0]][b[1]]=='0')count0++;
+                if(arr[c[0]][c[1]]=='0')count0++;
+                count1=4-count0;
+                ans+=(count1>count0?count0:count1);
+            }
+        }
+        cout<<ans;
+        if(t)cout<<endl;
+    }
+    return 0;
+}
+ COPY
+ COPY
