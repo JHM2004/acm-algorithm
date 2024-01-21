@@ -34,7 +34,7 @@ PS：一个数的最大公约数即本身。
 9
  ，n≥k≥1（神犇学校，人数众多）。
 
-
+ac代码：
  #include<bits/stdc++.h>
 using namespace std;
 int main()
