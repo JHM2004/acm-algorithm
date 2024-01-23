@@ -1,0 +1,68 @@
+描述
+
+Many people like to solve hard puzzles some of which may lead them to madness. One such puzzle could be finding a hidden prime number in a given text. Such number could be the number of different substrings of a given size that exist in the text. As you soon will discover, you really need the help of a computer and a good algorithm to solve such a puzzle.
+Your task is to write a program that given the size, N, of the substring, the number of different characters that may occur in the text, NC, and the text itself, determines the number of different substrings of size N that appear in the text.
+
+As an example, consider N=3, NC=4 and the text “daababac”. The different substrings of size 3 that can be found in this text are: “daa”; “aab”; “aba”; “bab”; “bac”. Therefore, the answer should be 5.
+
+输入描述
+
+The first line of input consists of two numbers, N and NC, separated by exactly one space. This is followed by the text where the search takes place. You may assume that the maximum number of substrings formed by the possible set of characters does not exceed 16 Millions.
+
+输出描述
+
+The program should output just an integer corresponding to the number of different substrings of size N found in the given text.
+
+用例输入 1 
+
+3 4
+daababac
+用例输出 1 
+
+5
+提示
+
+Huge input,scanf is recommended.
+
+来源
+
+
+POJ 1200
+
+
+
+#include<cstdio>
+#include<vector>
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+//本题采用字符串哈希的做法，参考网上优秀题解，加以自己的理解
+typedef long long ll;
+typedef unsigned long long ull;
+const int maxn = 1e6 + 10;
+const int inf = 0x3f3f3f3f;
+const int mod = 1e9 + 7;
+const int base = 998544323;
+ull a[maxn];
+char s[maxn];
+vector<ull> v;
+int main(){
+    int n, m;        //n是需要取的一段字符串的长度，m是总的字符的种类个数
+    scanf("%d%d", &n, &m);
+    scanf("%s", s);
+    ull p = 1e9 + 9,//此超大质数是进制（p进制）
+    r = 1,          //r是最高位的单位一，用于把旧的最高位删掉
+    h = 0;          //h是字符串此时转成的整数
+    int len = strlen(s);   //len是总的字符串的长度
+    for(int i = 0; i < n && i < len; i++) // 计算出前n位
+        h = h * p + s[i], r *= p;
+    if(len >= n) // 该串长度大于n， 加进去
+        v.push_back(h);
+    for(int i = n; i < len; i++)
+        h = h * p + s[i] - s[i - n] * r, v.push_back(h);// 计算其他串的hash值
+    sort(v.begin(), v.end());
+    int tot = unique(v.begin(), v.end()) - v.begin();
+    printf("%d\n", tot);
+    return 0;
+}
