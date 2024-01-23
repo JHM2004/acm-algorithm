@@ -1,0 +1,93 @@
+出题人：
+
+描述
+
+Given a list of phone numbers, determine if it is consistent in the sense that no number is the prefix of another. Let's say the phone catalogue listed these numbers:
+
+Emergency 911
+Alice 97 625 999
+Bob 91 12 54 26
+In this case, it's not possible to call Bob, because the central would direct your call to the emergency line as soon as you had dialled the first three digits of Bob's phone number. So this list would not be consistent.
+
+输入描述
+
+The first line of input gives a single integer, 1 ≤ t ≤ 40, the number of test cases. Each test case starts with n, the number of phone numbers, on a separate line, 1 ≤ n ≤ 10000. Then follows n lines with one unique phone number on each line. A phone number is a sequence of at most ten digits.
+
+输出描述
+
+For each test case, output "YES" if the list is consistent, or "NO" otherwise.
+
+用例输入 1 
+
+2
+3
+911
+97625999
+91125426
+5
+113
+12340
+123440
+12345
+98346
+用例输出 1 
+
+NO
+YES
+来源
+
+POJ 3630
+
+
+#include<iostream>
+#include<cstring>
+#include<cstdio>
+using namespace std;
+//本题是典型的Trie/字典树/前缀树の板子题，参考网上的优秀代码，加之我自己的理解
+int n,trie[100005][10],tot=1,endd[100005],t,flag,vis[100005];
+void insert(char* a)
+{
+	int len=strlen(a),p=1;
+	for(int k=0;k<len;k++)
+	{
+		int ch=a[k]-'0';
+		if(!trie[p][ch]) 
+		{
+			trie[p][ch]=++tot;
+			vis[p]=1;
+		}
+		if(endd[p])	//如果此节点为之前某字符串终点，说明此前字符串是此次字符串的子串 
+		{
+		    flag=0;return ;
+		}
+		p=trie[p][ch];
+	}
+	if(vis[p]) flag=0;//如果此次字符串最终所在位置已被访问，说明这是之前某字符串的子集  
+	endd[p]=1; //标记终点位置 
+	return ;
+}
+
+int main()
+{
+	scanf("%d",&t);
+	for(int i=1;i<=t;i++)
+	{
+		tot=1;flag=1;
+		memset(trie,0,sizeof(trie));
+		memset(endd,0,sizeof(endd));
+		memset(vis,0,sizeof(vis)); 
+		scanf("%d",&n);
+		//重置 
+		for(int j=1;j<=n;j++)
+		{
+			char a[12];
+			scanf("%s",a);
+			if(flag) insert(a); //如之前出现不符合，就直接跳过 
+		
+		}
+		if(flag) puts("YES");   //puts特效，自动“\n” 
+		else puts("NO");
+	
+	}
+	return 0;
+}
