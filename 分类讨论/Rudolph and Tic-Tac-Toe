@@ -1,0 +1,220 @@
+描述
+
+Rudolph invented the game of tic-tac-toe for three players. It has classic rules, except for the third player who plays with pluses. Rudolf has a 3×3 field  — the result of the completed game. Each field cell contains either a cross, or a nought, or a plus sign, or nothing. The game is won by the player who makes a horizontal, vertical or diagonal row of 3's of their symbols.
+
+Rudolph wants to find the result of the game. Either exactly one of the three players won or it ended in a draw. It is guaranteed that multiple players cannot win at the same time.
+
+输入描述
+
+The first line contains one integer t (1≤t≤10 
+4
+ ) — the number of test cases.
+
+Each test case consists of three lines, each of which consists of three characters. The symbol can be one of four: "X" means a cross, "O" means a nought, "+" means a plus, "." means an empty cell.
+
+输出描述
+
+For each test case, print the string "X" if the crosses won, "O" if the noughts won, "+" if the pluses won, "DRAW" if there was a draw.
+
+用例输入 1 
+
+5
++X+
+OXO
+OX.
+O+.
++OX
+X+O
+.XO
+OX.
++++
+O.+
+X.O
++..
+.++
+X.O
++..
+用例输出 1 
+
+X
+O
++
+DRAW
+DRAW
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int n;cin>>n;
+    while(n--)
+    {
+       	string a,b,c;
+        cin>>a>>b>>c;
+        if(a[0]==b[0]&&a[0]==c[0])
+        {
+            if(a[0]=='X')
+            {
+                cout<<'X'<<endl;
+                continue;
+            }
+            if(a[0]=='O')
+            {
+                cout<<'O'<<endl;
+                continue;
+            }
+            if(a[0]=='+')
+            {
+                cout<<'+'<<endl;
+                continue;
+            }
+        }
+        
+        
+        
+        if(a[1]==b[1]&&a[1]==c[1])
+        {
+            if(a[1]=='X')
+            {
+                cout<<'X'<<endl;
+                continue;
+            }
+            if(a[1]=='O')
+            {
+                cout<<'O'<<endl;
+                continue;
+            }
+            if(a[1]=='+')
+            {
+                cout<<'+'<<endl;
+                continue;
+            }
+        }
+        
+        
+        
+        if(a[2]==b[2]&&a[2]==c[2])
+        {
+            if(a[2]=='X')
+            {
+                cout<<'X'<<endl;
+                continue;
+            }
+            if(a[2]=='O')
+            {
+                cout<<'O'<<endl;
+                continue;
+            }
+            if(a[2]=='+')
+            {
+                cout<<'+'<<endl;
+                continue;
+            }
+        }
+        
+        if(a[0]==a[1]&&a[2]==a[1])
+        {
+            if(a[2]=='X')
+            {
+                cout<<'X'<<endl;
+                continue;
+            }
+            if(a[2]=='O')
+            {
+                cout<<'O'<<endl;
+                continue;
+            }
+            if(a[2]=='+')
+            {
+                cout<<'+'<<endl;
+                continue;
+            }
+        }
+        
+         if(b[0]==b[1]&&b[2]==b[1])
+        {
+            if(b[2]=='X')
+            {
+                cout<<'X'<<endl;
+                continue;
+            }
+            if(b[2]=='O')
+            {
+                cout<<'O'<<endl;
+                continue;
+            }
+            if(b[2]=='+')
+            {
+                cout<<'+'<<endl;
+                continue;
+            }
+        }
+        
+        
+        
+         if(c[0]==c[1]&&c[2]==c[1])
+        {
+            if(c[2]=='X')
+            {
+                cout<<'X'<<endl;
+                continue;
+            }
+            if(c[2]=='O')
+            {
+                cout<<'O'<<endl;
+                continue;
+            }
+            if(c[2]=='+')
+            {
+                cout<<'+'<<endl;
+                continue;
+            }
+        }
+        
+        if(a[0]==b[1]&&b[1]==c[2])
+        {
+            if(a[0]=='X')
+            {
+                cout<<'X'<<endl;
+                continue;
+            }
+            if(a[0]=='O')
+            {
+                cout<<'O'<<endl;
+                continue;
+            }
+            if(a[0]=='+')
+            {
+                cout<<'+'<<endl;
+                continue;
+            }
+        }
+        
+        
+        if(a[2]==b[1]&&b[1]==c[0])
+        {
+            if(a[2]=='X')
+            {
+                cout<<'X'<<endl;
+                continue;
+            }
+            if(a[2]=='O')
+            {
+                cout<<'O'<<endl;
+                continue;
+            }
+            if(a[2]=='+')
+            {
+                cout<<'+'<<endl;
+                continue;
+            }
+        }
+        
+        cout<<"DRAW"<<endl;
+        
+    }
+    return 0;
+}
