@@ -1,0 +1,98 @@
+描述
+
+Given two sequences of numbers : a[1], a[2], … , a[N], and b[1], b[2], … , b[M] (1 <= M <= 10000, 1 <= N <= 1000000). Your task is to find a number K which make a[K] = b[1], a[K + 1] = b[2], … , a[K + M - 1] = b[M]. If there are more than one K exist, output the smallest one.
+
+输入描述
+
+The first line of input is a number T which indicate the number of cases. Each case contains three lines. The first line is two numbers N and M (1 <= M <= 10000, 1 <= N <= 1000000). The second line contains N integers which indicate a[1], a[2], … , a[N]. The third line contains M integers which indicate b[1], b[2], … , b[M]. All integers are in the range of [-1000000, 1000000].
+
+输出描述
+
+For each test case, you should output one line which only contain K described above. If no such K exists, output -1 instead.
+
+用例输入 1 
+
+2
+13 5
+1 2 1 2 3 1 2 3 1 3 2 1 2
+1 2 3 1 3
+13 5
+1 2 1 2 3 1 2 3 1 3 2 1 2
+1 2 3 2 1
+用例输出 1 
+
+6
+-1
+来源
+HDU 1711
+
+
+
+
+
+
+#include<iostream>
+using namespace std; 
+//板子题，本题采用kmp算法，参考网上优秀题解，增加自己的理解
+int str[1000100],//即题目中的a数组，数组元素很多，是被匹配数组(从下标0开始的)
+ptr[10001];//模拟题目中的b数组，是匹配数组（从下标0开始的）
+int Next[10001];//b（ptr）数组的next数组 注:Next[0]=-1;
+int n,m;
+
+//寻找子串在模板中的首次出现位置
+void gtnext()//完善b数组的next数组（板子）
+{
+	int k=-1;
+	int j=0;
+	while(j<m)
+	{
+		if(k==-1||ptr[j]==ptr[k])
+		{
+			++j;++k;
+			if(ptr[j]!=ptr[k])//优化next，使kmp更加快一点 
+				Next[j]=k;
+			else Next[j]=Next[k];
+		}
+		else k=Next[k];
+	}
+	return ;
+}
+
+int kmp()//完善好next数组后就可以kmp算法了
+{
+	int i=0;int j=0;
+	while(i<n&&j<m)
+	{
+		if(j==-1||str[i]==ptr[j])
+		{
+			i++;
+			j++;
+		}
+		else j=Next[j];
+		if(j==m) return i-j+1;//此时返回的是a完全匹配b数组时是a数组的第几个数（从1开始数数）
+	}
+	return -1;//无法完全匹配就返回-1
+ } 
+
+int main()
+{
+	int t;
+	while(cin>>t)
+	{
+		while(t--)
+		{
+			scanf("%d%d",&n,&m);//数字太多用scanf ,以节省时间
+			for(int x=0; x<n; x++)
+			{
+				scanf("%d",&str[x]);//数字太多用scanf ，以节省时间
+			}
+			for(int y=0; y<m; y++)
+			{
+				scanf("%d",&ptr[y]);//数字太多用scanf ，以节省时间
+			}
+			Next[0]=-1;
+			gtnext();
+			printf("%d\n",kmp());
+		}	
+	}
+ } 
