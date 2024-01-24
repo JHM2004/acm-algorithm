@@ -1,0 +1,218 @@
+出题人：
+
+描述
+
+You are given an array a of n integers, and another integer k such that 2k≤n.
+
+You have to perform exactly k operations with this array. In one operation, you have to choose two elements of the array (let them be a 
+i
+​
+  and a 
+j
+​
+ ; they can be equal or different, but their positions in the array must not be the same), remove them from the array, and add ⌊ 
+a 
+j
+​
+ 
+a 
+i
+​
+ 
+​
+ ⌋ to your score, where ⌊ 
+y
+x
+​
+ ⌋ is the maximum integer not exceeding  
+y
+x
+​
+ .
+
+Initially, your score is 0. After you perform exactly k operations, you add all the remaining elements of the array to the score.
+
+Calculate the minimum possible score you can get.
+
+输入描述
+
+The first line of the input contains one integer t (1≤t≤500) — the number of test cases.
+
+Each test case consists of two lines. The first line contains two integers n and k (1≤n≤100; 0≤k≤⌊ 
+2
+n
+​
+ ⌋).
+
+The second line contains n integers a 
+1
+​
+ ,a 
+2
+​
+ ,…,a 
+n
+​
+  (1≤a 
+i
+​
+ ≤2⋅10 
+5
+ ).
+
+输出描述
+
+Print one integer — the minimum possible score you can get.
+
+用例输入 1 
+
+5
+7 3
+1 1 1 2 1 3 1
+5 1
+5 5 5 5 5
+4 2
+1 3 3 7
+2 0
+4 2
+9 2
+1 10 10 1 10 2 7 10 3
+用例输出 1 
+
+2
+16
+0
+6
+16
+提示
+
+Let's consider the example test.
+
+In the first test case, one way to obtain a score of 2 is the following one:
+
+choose a 
+7
+​
+ =1 and a 
+4
+​
+ =2 for the operation; the score becomes 0+⌊ 
+2
+1
+​
+ ⌋=0, the array becomes [1,1,1,1,3];
+choose a 
+1
+​
+ =1 and a 
+5
+​
+ =3 for the operation; the score becomes 0+⌊ 
+3
+1
+​
+ ⌋=0, the array becomes [1,1,1];
+choose a 
+1
+​
+ =1 and a 
+2
+​
+ =1 for the operation; the score becomes 0+⌊ 
+1
+1
+​
+ ⌋=1, the array becomes [1];
+add the remaining element 1 to the score, so the resulting score is 2.
+In the second test case, no matter which operations you choose, the resulting score is 16.
+
+In the third test case, one way to obtain a score of 0 is the following one:
+
+choose a 
+1
+​
+ =1 and a 
+2
+​
+ =3 for the operation; the score becomes 0+⌊ 
+3
+1
+​
+ ⌋=0, the array becomes [3,7];
+choose a 
+1
+​
+ =3 and a 
+2
+​
+ =7 for the operation; the score becomes 0+⌊ 
+7
+3
+​
+ ⌋=0, the array becomes empty;
+the array is empty, so the score doesn't change anymore.
+In the fourth test case, no operations can be performed, so the score is the sum of the elements of the array: 4+2=6.
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);cin.tie(0);
+    int t;cin>>t;
+    while(t--)
+    {
+        int n,k;cin>>n>>k;
+        vector<int>a(n);
+        for(int i=0;i<n;i++)cin>>a[i];
+        sort(a.begin(),a.end());
+        //末尾两个元素相消
+        int ans=0;
+        int min_num=1e9;
+        int kk=k; 
+        int count=0;
+        int j=a.size()-1;
+        while(kk--)
+        {
+            count+=a[j-1]/a[j];
+			j-=2;//没弄的末尾
+        }
+        for(int i=0;i<=j;i++)
+        {
+            count+=a[i];
+        }
+        min_num=min(min_num,count);
+        //末尾与前一个较小的元素相消
+        vector<bool>flag(n);
+        for(int i=0;i<n;i++)
+        {
+            flag[i]=false;//没有选
+        }
+        j=a.size()-1;
+        count=0;
+        kk=k;
+        int left=a.size()-kk-1;
+        int ok=0;
+        while(kk--)
+        {
+            count+=a[left]/a[j];
+            flag[left]=1;
+            flag[j]=1;
+            j--;left--;
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            if(!flag[i])
+            {
+                count+=a[i];
+            }
+        }
+        min_num=min(min_num,count);
+      	cout<<min_num;
+        if(t)cout<<endl;
+    }
+    return 0;
+}
