@@ -1,0 +1,194 @@
+描述
+
+n towns are arranged in a circle sequentially. The towns are numbered from 1 to n in clockwise order. In the i-th town, there lives a singer with a repertoire of a 
+i
+​
+  minutes for each i∈[1,n].
+
+Each singer visited all n towns in clockwise order, starting with the town he lives in, and gave exactly one concert in each town. In addition, in each town, the i-th singer got inspired and came up with a song that lasts a 
+i
+​
+  minutes. The song was added to his repertoire so that he could perform it in the rest of the cities.
+
+Hence, for the i-th singer, the concert in the i-th town will last a 
+i
+​
+  minutes, in the (i+1)-th town the concert will last 2⋅a 
+i
+​
+  minutes, ..., in the ((i+k)modn+1)-th town the duration of the concert will be (k+2)⋅a 
+i
+​
+ , ..., in the town ((i+n−2)modn+1) — n⋅a 
+i
+​
+  minutes.
+
+You are given an array of b integer numbers, where b 
+i
+​
+  is the total duration of concerts in the i-th town. Reconstruct any correct sequence of positive integers a or say that it is impossible.
+
+输入描述
+
+The first line contains one integer t (1≤t≤10 
+3
+ ) — the number of test cases. Then the test cases follow.
+
+Each test case consists of two lines. The first line contains a single integer n (1≤n≤4⋅10 
+4
+ ) — the number of cities. The second line contains n integers b 
+1
+​
+ ,b 
+2
+​
+ ,…,b 
+n
+​
+  (1≤b 
+i
+​
+ ≤10 
+9
+ ) — the total duration of concerts in i-th city.
+
+The sum of n over all test cases does not exceed 2⋅10 
+5
+ .
+
+输出描述
+
+For each test case, print the answer as follows:
+
+If there is no suitable sequence a, print NO. Otherwise, on the first line print YES, on the next line print the sequence a 
+1
+​
+ ,a 
+2
+​
+ ,…,a 
+n
+​
+  of n integers, where a 
+i
+​
+  (1≤a 
+i
+​
+ ≤10 
+9
+ ) is the initial duration of repertoire of the i-th singer. If there are multiple answers, print any of them.
+
+用例输入 1 
+
+4
+3
+12 16 14
+1
+1
+3
+1 2 3
+6
+81 75 75 93 93 87
+用例输出 1 
+
+YES
+3 1 3 
+YES
+1 
+NO
+YES
+5 5 4 1 4 5
+提示
+
+Let's consider the 1-st test case of the example:
+
+the 1-st singer in the 1-st city will give a concert for 3 minutes, in the 2-nd — for 6 minutes, in the 3-rd — for 9 minutes;
+the 2-nd singer in the 1-st city will give a concert for 3 minutes, in the 2-nd — for 1 minute, in the 3-rd - for 2 minutes;
+the 3-rd singer in the 1-st city will give a concert for 6 minutes, in the 2-nd — for 9 minutes, in the 3-rd — for 3 minutes.
+
+
+
+#include<bits/stdc++.h>
+#define int long long
+using namespace std;
+signed main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);cin.tie(0);
+    int t;cin>>t;
+    while(t--)
+    {
+        int n;cin>>n;
+        vector<int>b(n);
+        for(int i=0;i<n;i++)cin>>b[i];
+        int sumb=0;
+        for(int i=0;i<n;i++)sumb+=b[i];
+        int ret=0;
+        if(n&1)
+        {
+            ret=((n+1)/2)*n;
+        }
+        else
+        {
+            ret=(n/2)*(n+1);
+        }
+        
+        if((sumb/ret)*ret!=sumb)cout<<"NO"<<endl;
+        
+        else 
+        {
+            int ok=1;
+            int suma=sumb/ret;
+            vector<int>a(n);
+            
+            for(int i=1;i<n;i++)
+            {
+                int rr=suma+b[i-1]-b[i];
+                if((rr/n)*n!=rr)
+                {
+                    cout<<"NO"<<endl;
+                    ok=0;
+                    break;
+                }
+                rr/=n;
+                a[i]=rr;
+            }
+            if(ok)
+            {
+                int rr=suma+b[n-1]-b[0];
+                if((rr/n)*n!=rr)
+                {
+                    cout<<"NO"<<endl;
+                    ok=0;
+                }
+                rr/=n;
+                a[0]=rr;
+            }
+            //ok?
+            if(ok==0)continue;
+            for(int i=0;i<n;i++)
+            {
+                if(a[i]<=0)
+                {
+                    ok=0;
+                    cout<<"NO"<<endl;
+                    break;
+                }
+            }
+            if(ok==0)continue;
+            else 
+            {
+                cout<<"YES"<<endl;
+                for(int i=0;i<n;i++)
+                {
+                    cout<<a[i];
+                    if(i!=n-1)cout<<' ';
+                }
+                if(t)cout<<endl;
+            }
+        }
+    }
+    return 0;
+}
