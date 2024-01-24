@@ -1,0 +1,80 @@
+描述
+
+The little cat is so famous, that many couples tramp over hill and dale to Byteland, and asked the little cat to give names to their newly-born babies. They seek the name, and at the same time seek the fame. In order to escape from such boring job, the innovative little cat works out an easy but fantastic algorithm:
+
+Step1. Connect the father’s name and the mother’s name, to a new string S.
+Step2. Find a proper prefix-suffix string of S (which is not only the prefix, but also the suffix of S).
+
+Example: Father=‘ala’, Mother=‘la’, we have S = ‘ala’+‘la’ = ‘alala’. Potential prefix-suffix strings of S are {‘a’, ‘ala’, ‘alala’}. Given the string S, could you help the little cat to write a program to calculate the length of possible prefix-suffix strings of S? (He might thank you by giving your baby a name:)
+
+输入描述
+
+The input contains a number of test cases. Each test case occupies a single line that contains the string S described above.
+
+Restrictions: Only lowercase letters may appear in the input. 1 <= Length of S <= 400000.
+
+输出描述
+
+For each test case, output a single line with integer numbers in increasing order, denoting the possible length of the new baby’s name.
+
+用例输入 1 
+
+ababcababababcabab
+aaaaa
+用例输出 1 
+
+2 4 9 18
+1 2 3 4 5
+来源 POJ 2752
+
+
+
+#include<iostream>
+#include<cstring>
+#include<cstdio>
+using namespace std;
+//求公共前后缀的长度种类数量
+//本题是kmp算法的应用，参考网上的优秀代码，加以自己の理解
+//板子题
+
+char str[800010];
+int Next[800010];//注意next在程序中有特有的意义，这里注意区别一下
+int ans[800010];
+int slen;//字符串的长度
+//求next数组的核心代码
+void gtnext()
+{
+    Next[0]=-1;//不要忘记先把next[0]赋值为-1
+	int k=-1;int j=0;
+	while(j<slen)
+	{
+		if(k==-1||str[j]==str[k])
+		{
+			j++,k++;
+			Next[j]=k;
+		}
+		else k=Next[k];
+	}
+	return ;
+}//这是kmp中很基础的一种求解next数组的模板
+
+int main()
+{
+	while(cin>>str)
+	{
+		slen=strlen(str);
+		gtnext();//求出next数组
+		int cnt=0;
+		int tp=slen;
+        
+		while(Next[tp]!=0)
+		{//即这个字符串有公共前后缀
+			ans[cnt++]=Next[tp];
+			tp=Next[tp];//存储答案的过程
+		}
+        
+		for(int i=cnt-1; i>=0; i--)
+			cout<<ans[i]<<" ";
+		cout<<slen<<endl;//注意最后输出字符串的长度（当成是最长的公共前后缀）
+	}
+ } 
